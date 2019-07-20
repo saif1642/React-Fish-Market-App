@@ -7,7 +7,7 @@ import Fish from './Fish';
 class App extends React.Component{
     state = {
         fishes:{},
-        orders:{}
+        order:{}
     }
     addFish = fish =>{
         console.log(fish);
@@ -20,6 +20,14 @@ class App extends React.Component{
             fishes:fishes
         });
     }
+    addToOrder = (key) =>{
+        //1.Take a copy of the state
+        const order = { ...this.state.order}
+        //2.add the order or update the existing one
+        order[key] = order[key]+1 || 1;
+        //3.call setState to update our state
+        this.setState({order:order});
+    } 
     loadSampleFishes = () =>{
         this.setState({ fishes : sampleFishes});
     }
@@ -29,10 +37,10 @@ class App extends React.Component{
               <div className="menu">
                   <Header tagline="saif is cool" age={500} cool={true}/>
                   <ul className="fishes">
-                      {Object.keys(this.state.fishes).map(key => <Fish key={key} details={this.state.fishes[key]}/>)}
+                      {Object.keys(this.state.fishes).map(key => <Fish key={key} index={key} details={this.state.fishes[key]} addToOrder={this.addToOrder}/>)}
                   </ul>
               </div>
-              <Order />
+              <Order fishes={this.state.fishes} order={this.state.order} />
               <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
            </div>
         );
